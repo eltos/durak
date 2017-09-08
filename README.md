@@ -37,3 +37,9 @@
 #### Special rules
 - An offender is allowed to start his attack with multiple cards of the same name/number
 - If the defender has a card of the same name/number as the card(s), that was/were first layed open by the offender, he can place his card next to the offenders card(s). By doing so, he forwards the attack to the player left to him. Now, the former defender becomes the new offender and the former co-offender the new defender. However, this is only possible as long as the co-offender has not jet played a card to reinforce the attack.
+
+
+## Requirements
+
+- Python 2.7 (3 may work as well)
+- PyQt4 
