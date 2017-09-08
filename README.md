@@ -39,6 +39,22 @@
 - If the defender has a card of the same name/number as the card(s), that was/were first layed open by the offender, he can place his card next to the offenders card(s). By doing so, he forwards the attack to the player left to him. Now, the former defender becomes the new offender and the former co-offender the new defender. However, this is only possible as long as the co-offender has not jet played a card to reinforce the attack.
 
 
+## Control
+#### Mouse / Touch
+- Cards can be played easily via drag and drop
+- A single click selects/unselects a card in order to play multiple cards at the same time
+- A double click plays a card automatically
+#### Keyboard
+- Use `LEFT`/`RIGHT` arrows to select a single card or multiple cards by holding `SHIFT` in doing so
+- Use the `UP` arrow to play the card automatically
+- Use the `DOWN` arrow to unselect all cards. Press again, to take all cards
+- `Ctrl`+`A` selects all cards
+- `F11` toggles fullscreen mode
+- `SPACE` pauses/resumes the game
+- `M` opens the menu
+- `Ctrl`+`N` starts a new game
+
+
 ## Requirements
 
 - Python 2.7 (3 may work as well)
