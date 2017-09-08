@@ -1,0 +1,10 @@
+
+__pycache__/
+*.py[cod]
+*$py.class
+*.manifest
+*.spec
+
+*.sav
+_local/
+.idea/
