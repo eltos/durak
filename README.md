@@ -59,3 +59,14 @@
 
 - Python 2.7 (3 may work as well)
 - PyQt4 
+
+
+## License
+
+Copyright 2017 Philipp Niedermayer ([github.com/eltos](https://github.com/eltos))
+
+Licensed under the [Apache License 2.0](http://www.apache.org/licenses/LICENSE-2.0)  
+
+
+You may only use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software in compliance with the License. For more information visit http://www.apache.org/licenses/LICENSE-2.0  
+The above copyright notice alongside a copy of the Apache License shall be included in all copies or substantial portions of the Software.
