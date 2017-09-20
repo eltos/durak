@@ -111,6 +111,17 @@
         <source>Toggle fullscreen</source>
         <translation>Vollbild umschalten</translation>
     </message>
-	
+    <message>
+        <source>Card deck:</source>
+        <translation>Kartendeck:</translation>
+    </message>
+    <message>
+        <source>36 cards</source>
+        <translation>36 Karten</translation>
+    </message>
+    <message>
+        <source>52 cards</source>
+        <translation>52 Karten</translation>
+    </message>
 </context>
 </TS>

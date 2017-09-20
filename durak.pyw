@@ -91,12 +91,10 @@ class Durak(QtGui.QGraphicsItem):
         # CARD ITEMS and VIRTUALS
         self.card_Items = {}
         for color in range(4):
-            for name in range(6, 15):
+            for name in range(2, 15):
                 card = Card(color, name)
                 self.trash.add_cards([card])
-                self.card_Items.update({card: CardItem(self, card,
-                                                       size=QtCore.QSize(70,
-                                                                         105))})
+                self.card_Items.update({card: CardItem(self, card, size=QtCore.QSize(70, 105))})
                 self.card_Items[card].hide()
 
         # self.sett.anim = QtCore.QParallelAnimationGroup(self.scene())# anim#
@@ -134,8 +132,7 @@ class Durak(QtGui.QGraphicsItem):
         self.trash_Item.setZValue(0)
 
         # BUTTONS
-        self.cardbutton = TimerButton(self,  # auto_click_delay = 20,
-                                      on_click=self.action_take_or_remove_all_cards)
+        self.cardbutton = TimerButton(self, on_click=self.action_take_or_remove_all_cards) # auto_click_delay = 20,
         self.cardbutton.setDisabled(True)
         self.pausebutton = Button(self, on_click=self.new_game)
         self.pausebutton.setText(self.tr('New game'))
@@ -158,8 +155,8 @@ class Durak(QtGui.QGraphicsItem):
             self.cardbutton.resetTimer()
         if len(self.table.get_cards()) > 0 and None not in self.table.get_defence_cards():
             if self.next_attacking_player().number_of_cards() == 0 or \
-                                    self.attacking_player.number_of_cards() == 0 and self.next_attacking_player(
-                        +1).number_of_cards() == 0:
+                                    self.attacking_player.number_of_cards() == 0 and \
+                                    self.next_attacking_player(+1).number_of_cards() == 0:
                 self.end_attack_time = time.clock()
             else:
                 # time, when attack can be terminated
@@ -179,7 +176,7 @@ class Durak(QtGui.QGraphicsItem):
         ratio_a_b = 2.  # a = width_of_seat; b = height_of_seat
         max_a_h = 0.5  # a <= max_a_h*height_of_window
 
-        if (width > (2. / ratio_a_b + 3) * max_a_h * height):
+        if width > (2. / ratio_a_b + 3) * max_a_h * height:
             a = max_a_h * height
         else:
             a = width / (2 / ratio_a_b + 3)
@@ -187,8 +184,7 @@ class Durak(QtGui.QGraphicsItem):
 
         # C A R D S
         for card in self.card_Items.keys():
-            self.card_Items[card].setSize(QtCore.QSize(max(1, (b - d) * 70 / 105),
-                                                       max(1, (b - d))))
+            self.card_Items[card].setSize(QtCore.QSize(max(1, (b - d) * 70 / 105), max(1, (b - d))))
 
         # S E A T
         for i, x, y, dx, dy, r in ((0, width / 2., height - b / 2., 2 * a, b, 0),  # player 0
@@ -199,32 +195,26 @@ class Durak(QtGui.QGraphicsItem):
                                    (5, width - b / 2., a / 2., a, b, 270)):
             self.seat_Items[i].setPos(x, y)
             self.seat_Items[i].setRotation(r)
-            self.seat_Items[i].setSize(QtCore.QSize(max(1, dx),
-                                                    max(1, dy)))
+            self.seat_Items[i].setSize(QtCore.QSize(max(1, dx), max(1, dy)))
 
         # T A B L E
         self.table_Item.setPos(self.boundingRect().center())
-        self.table_Item.setSize(QtCore.QSize(max(1, width - 2.2 * b),
-                                             max(1, height - 2.2 * b)))
+        self.table_Item.setSize(QtCore.QSize(max(1, width - 2.2 * b), max(1, height - 2.2 * b)))
 
         # S T A C K
         self.stack_Item.setPos(75 * s, height - 75 * s)
-        self.stack_Item.setSize(QtCore.QSize(max(1, 150 * s),
-                                             max(1, 150 * s)))
+        self.stack_Item.setSize(QtCore.QSize(max(1, 150 * s), max(1, 150 * s)))
 
         # T R A S H
         self.trash_Item.setPos(width*1.2, height*1.2)
 
         # B U T T O N S
         self.cardbutton.setPos(width - 80 * s, height - 90 * s)
-        self.cardbutton.setSize(QtCore.QSize(max(1, 120 * s),
-                                             max(1, 20 * s)))
+        self.cardbutton.setSize(QtCore.QSize(max(1, 120 * s), max(1, 20 * s)))
         self.pausebutton.setPos(width - 80 * s, height - 60 * s)
-        self.pausebutton.setSize(QtCore.QSize(max(1, 120 * s),
-                                              max(1, 20 * s)))
+        self.pausebutton.setSize(QtCore.QSize(max(1, 120 * s), max(1, 20 * s)))
         self.menubutton.setPos(width - 80 * s, height - 30 * s)
-        self.menubutton.setSize(QtCore.QSize(max(1, 120 * s),
-                                             max(1, 20 * s)))
+        self.menubutton.setSize(QtCore.QSize(max(1, 120 * s), max(1, 20 * s)))
 
         self.update()
 
@@ -243,7 +233,7 @@ class Durak(QtGui.QGraphicsItem):
         else:
             # self.cardbutton.setState(2)
             self.cardbutton.setText(self.tr('End attack'))
-        self.cardbutton.setDisabled(self.players[0] != self.next_attacking_player() or \
+        self.cardbutton.setDisabled(self.players[0] != self.next_attacking_player() or
                                     len(self.table.get_cards()) == 0 or self.paused)
 
         if self.players[0] == self.next_attacking_player() and not self.can_fight_attack():
@@ -307,7 +297,7 @@ class Durak(QtGui.QGraphicsItem):
                                      bool(self.blocked))
 
     def set_player_number(self, n):
-        '''Adds player to game'''
+        """Adds player to game"""
         if not 2 <= n <= 6:
             raise Exception(self.tr('%1 Players not in range 2 to 6!').arg(n))
 
@@ -321,8 +311,7 @@ class Durak(QtGui.QGraphicsItem):
 
         self.KIinfo_players(self.players)
 
-        places = {1: (0), 2: (0, 3), 3: (0, 2, 4), 4: (0, 2, 3, 4), 5: (0, 1, 2, 4, 5), 6: (0, 1, 2, 3, 4, 5)
-                  }[len(self.players)]
+        places = {1: (0,), 2: (0,3), 3: (0,2,4), 4: (0,2,3,4), 5: (0,1,2,4,5), 6: (0,1,2,3,4,5)}[len(self.players)]
         for i in range(len(self.seat_Items)):
             if i in places:
                 self.seat_Items[i].set_player(self.players[places.index(i)])
@@ -335,10 +324,10 @@ class Durak(QtGui.QGraphicsItem):
         pickle.dump(self.players[0], f)
         f.close()
         self.sett.save()
-        print( self.tr('Bye') )
+        print(self.tr('Bye'))
 
     def new_game(self):
-        '''Starts new game'''
+        """Starts new game"""
         waspaused = self.paused
         self.paused = True
 
@@ -346,15 +335,15 @@ class Durak(QtGui.QGraphicsItem):
         lst = [self.tr('%1 player').arg(i) for i in range(2, 7)]
         a = QtGui.QInputDialog.getItem(self.scene().views()[0],
                                        self.scene().views()[0].windowTitle(), self.tr('New game:'),
-                                       lst,
-                                       current=(len(self.players) - 1 or 2) - 1, editable=False,
-                                       flags=QtCore.Qt.WindowTitleHint | QtCore.Qt.WindowSystemMenuHint | QtCore.Qt.FramelessWindowHint)
-        if a[1] == False:
+                                       lst, current=(len(self.players) - 1 or 2) - 1, editable=False,
+                                       flags=QtCore.Qt.WindowTitleHint | QtCore.Qt.WindowSystemMenuHint | \
+                                             QtCore.Qt.FramelessWindowHint)
+        if a[1]:  # ok
+            n = 2 + lst.index(a[0])
+        else:  # cancel
             self.paused = waspaused
             self.reset_timer()
             return
-        else:
-            n = 2 + lst.index(a[0])
 
         self.pausebutton.setDisabled(True)
 
@@ -366,13 +355,15 @@ class Durak(QtGui.QGraphicsItem):
         self.sett.setAnimationDuration(self.ANIMATION_DURATION)
                 
 
-        # move all card to stack:
-        self.stack.add_cards(self.trash.take_cards())
-        self.stack.add_cards(self.table.take_all_cards())
+        # collect cards
+        self.trash.add_cards(self.stack.take_all_cards())
+        self.trash.add_cards(self.table.take_all_cards())
         for player in self.players:
             player.set_active(True)
             while len(player.get_cards()) > 0:
-                self.stack.add_cards([player.play_card(player.get_cards()[0])])
+                self.trash.add_cards([player.play_card(player.get_cards()[0])])
+
+        self.stack.add_cards(self.trash.take_cards(deck=Trash.DECK52 if self.sett.isFullDeck() else Trash.DECK36))
 
         for card, item in self.card_Items.iteritems():
             item.setRaised(False)
@@ -386,12 +377,11 @@ class Durak(QtGui.QGraphicsItem):
 
         self.update()
 
-        QtCore.QTimer.singleShot(self.sett.getAnimationDuration() * 1.5,
-                                 self.start_new_game)
+        QtCore.QTimer.singleShot(self.sett.getAnimationDuration() * 1.5, self.start_new_game)
 
     def start_new_game(self):
-        print( 'neues Spiel\n===========' )
-        print( self.stack )
+        print('neues Spiel\n===========')
+        print(self.stack)
 
         # distribute
         self.distribute()
@@ -444,7 +434,7 @@ class Durak(QtGui.QGraphicsItem):
 
         self.blocked = False
         self.attacking_player = self.next_attacking_player(skip=int(skip_player))
-        if self.attacking_player == None:  # end of game
+        if self.attacking_player is None:  # end of game
             for player in self.players:
                 if player not in self.winners:
                     self.winners += [player]
@@ -470,24 +460,24 @@ class Durak(QtGui.QGraphicsItem):
         self.pausebutton.setText(self.tr('New game'))
         self.cardbutton.disableTimer()
         self.update()
-        print( '\n' + self.tr('Game finished') + '\n' + '=' * len(self.tr('Game finished')) )
+        print('\n' + self.tr('Game finished') + '\n' + '=' * len(self.tr('Game finished')))
         for p in self.winners:
-            print( '%i.\t%s\t(%.2f%%)' % (p.score[2], p.name, p.score[0] / p.score[1] * 100) )
+            print('%i.\t%s\t(%.2f%%)' % (p.score[2], p.name, p.score[0] / p.score[1] * 100))
 
         self.new_game()
 
     def distribute(self):
-        '''Distributes 6 cards to each player'''
+        """Distributes 6 cards to each player"""
         for i in range(6):
             for player in self.players:
                 cards = self.stack.take()
                 player.add_cards(cards)
-                if self.stack.size() == 0: # Only if it's the visible card
+                if self.stack.size() == 0:  # Only if it's the visible card
                     self.KIinfo_cards_moved(cards, to=player)
         self.update()  # //#
 
     def distribute_missing(self):
-        '''Distributes up to 6 cards to each player'''
+        """Distributes up to 6 cards to each player"""
         for player in self.players[self.first_player_in_round:] + self.players[:self.first_player_in_round]:
             while player.number_of_cards() < 6 and self.stack.size() > 0:
                 cards = self.stack.take()
@@ -497,7 +487,7 @@ class Durak(QtGui.QGraphicsItem):
         self.update()  # //#
 
     def start_player(self):
-        '''returns Player with lowest trump or first player, if no one has trump'''
+        """returns Player with lowest trump or first player, if no one has trump"""
         pt = {}
         for player in self.players:
             trump = []
@@ -512,8 +502,8 @@ class Durak(QtGui.QGraphicsItem):
             return self.players[0]
 
     def next_attacking_player(self, skip=0):
-        '''returns next attacked (active) player by skipping x players'''
-        if self.attacking_player == None: return None
+        """returns next attacked (active) player by skipping x players"""
+        if self.attacking_player is None: return None
         player = []
         i = self.players.index(self.attacking_player)
         for p in self.players[i:] + self.players[:i]:
@@ -865,8 +855,7 @@ class Durak(QtGui.QGraphicsItem):
         if settingsbox:
             settingsbox_layout = QtGui.QGridLayout(settingsbox)
 
-            themechooserlabel = QtGui.QLabel(settingsbox)
-            themechooserlabel.setText(self.tr('Theme:'))
+            themechooserlabel = QtGui.QLabel(settingsbox, text=self.tr('Theme:'))
             themechooser = QtGui.QComboBox(settingsbox)
 
             themesdir = QtCore.QDir(self.sett.THEME_DIR)
@@ -882,13 +871,24 @@ class Durak(QtGui.QGraphicsItem):
                 # to force reinitialisation of resources in item objects:
                 self.resize(self.boundingRect().width(), self.boundingRect().height())
 
-            themechooser.connect(themechooser, QtCore.SIGNAL('currentIndexChanged(const QString&)'),
-                                 onThemeChange)
+            themechooser.connect(themechooser, QtCore.SIGNAL('currentIndexChanged(const QString&)'), onThemeChange)
+            settingsbox_layout.addWidget(themechooserlabel, 0, 0, alignment=QtCore.Qt.AlignLeft)
+            settingsbox_layout.addWidget(themechooser, 0, 1, alignment=QtCore.Qt.AlignLeft)
 
-            settingsbox_layout.addWidget(themechooserlabel, 0, 0,
-                                         alignment=QtCore.Qt.AlignLeft)
-            settingsbox_layout.addWidget(themechooser, 0, 1,
-                                         alignment=QtCore.Qt.AlignLeft)
+
+            deckchooserlabel = QtGui.QLabel(settingsbox, text=self.tr("Card deck:"))
+            deckchooser = QtGui.QComboBox(settingsbox)
+            deckchooser.addItems([self.tr('36 cards'),self.tr('52 cards')])
+            deckchooser.setCurrentIndex(1 if self.sett.isFullDeck() else 0)
+            def onDeckChange(deck):
+                print("Deck:",deck)
+                self.sett.setFullDeck(deck)
+            deckchooser.connect(deckchooser, QtCore.SIGNAL('currentIndexChanged(const int)'), onDeckChange)
+
+            settingsbox_layout.addWidget(deckchooserlabel, 1, 0, alignment=QtCore.Qt.AlignLeft)
+            settingsbox_layout.addWidget(deckchooser, 1, 1, alignment=QtCore.Qt.AlignLeft)
+
+
             # settingsbox_layout.setRowStretch(1, 1)
 
         layout = QtGui.QGridLayout(window)

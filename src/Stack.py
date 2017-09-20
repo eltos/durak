@@ -42,6 +42,11 @@ class Stack:
         self.cards = self.cards[number:]
         return cards
 
+    def take_all_cards(self):
+        cards = self.cards[:]
+        self.cards = []
+        return cards
+
     def size(self):
         return len(self.cards)
 
