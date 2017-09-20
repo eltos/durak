@@ -8,3 +8,6 @@ __pycache__/
 *.sav
 _local/
 .idea/
+
+build/tmp/
+*.spec
