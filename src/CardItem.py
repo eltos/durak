@@ -118,7 +118,7 @@ class CardItem(QtGui.QGraphicsObject):  # QtGui.QGraphicsItem):
         self.parentItem().card_moved(self)
 
     def setPos(self, *pos):
-        # print time.clock(),'posSET'
+        # print time.time(),'posSET'
         # if self.moved != None:
         #    return
 
@@ -157,7 +157,7 @@ class CardItem(QtGui.QGraphicsObject):  # QtGui.QGraphicsItem):
         self.graphic = image
 
     def setParentItem(self, parent):
-        # print time.clock(),'posPARENT'
+        # print time.time(),'posPARENT'
 
         P_from = parent.mapFromItem(self.parentItem(), self.pos())
         Pto = self.pos()  # parent.mapToItem(self.parentItem(), self.pos())
@@ -230,7 +230,7 @@ class CardItem(QtGui.QGraphicsObject):  # QtGui.QGraphicsItem):
         self.POSanim.setEndValue(to)
         self.POSanim.setDuration(self.parentItem().sett.getAnimationDuration())
         # def x():
-        #    print time.clock(),'FERTIG'
+        #    print time.time(),'FERTIG'
         # z = self.zValue()
         # self.setZValue(100)
         # self.anim.connect(self.anim, QtCore.SIGNAL('finished()'), lambda: self.setZValue(z))

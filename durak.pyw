@@ -1,3 +1,4 @@
+#!/usr/bin/python
 # -*- coding: cp1252 -*-
 
 # Copyright 2017 Philipp Niedermayer (github.com/eltos)
@@ -37,8 +38,6 @@ ICON_FILE = resource_path('D.ico')
 Settings.THEME_DIR = resource_path('themes')
 Settings.SETTINGS_FILE = 'settings.sav'
 
-print( TRANSLATIONS_DIR)
-
 
 class Durak(QtGui.QGraphicsItem):
 
@@ -66,7 +65,7 @@ class Durak(QtGui.QGraphicsItem):
         self.blocked = False
         self.first_player_in_round = None
         self.winners = []
-        self.end_attack_time = time.clock()
+        self.end_attack_time = time.time()
         self.paused = False
 
         self.first_selected_card = None
@@ -171,15 +170,15 @@ class Durak(QtGui.QGraphicsItem):
             if self.next_attacking_player().number_of_cards() == 0 or \
                                     self.attacking_player.number_of_cards() == 0 and \
                                     self.next_attacking_player(+1).number_of_cards() == 0:
-                self.end_attack_time = time.clock()
+                self.end_attack_time = time.time()
             else:
                 # time, when attack can be terminated
                 if self.only_KIs_left():
-                    self.end_attack_time = time.clock() + self.END_ATTACK_DELAY*self.FAST_FORWARD_FACTOR
+                    self.end_attack_time = time.time() + self.END_ATTACK_DELAY*self.FAST_FORWARD_FACTOR
                 else:
-                    self.end_attack_time = time.clock() + self.END_ATTACK_DELAY
+                    self.end_attack_time = time.time() + self.END_ATTACK_DELAY
         else:
-            self.end_attack_time = time.clock()
+            self.end_attack_time = time.time()
 
     def resize(self, width, height):
         self.boundingrect = QtCore.QRectF(0, 0, width, height)
@@ -568,7 +567,7 @@ class Durak(QtGui.QGraphicsItem):
             player.add_cards(res)
             self.KIinfo_cards_moved(res, to=player)
             self.new_round(skip_player=True)
-        elif self.end_attack_time <= time.clock():  # remove
+        elif self.end_attack_time <= time.time():  # remove
             res = self.table.remove_cards()
             if res != False:
                 self.trash.add_cards(res)

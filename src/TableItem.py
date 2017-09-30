@@ -135,7 +135,7 @@ class TableItem(QtGui.QGraphicsItem):
         if self.table == None:
             return
         n = len(self.table.get_cards())
-        # n = int(1+(time.clock()/3)%20)
+        # n = int(1+(time.time()/3)%20)
 
         Acard = self.parentItem().card_Items[self.parentItem().card_Items.keys()[0]]
         d = max(Acard.boundingRect().width() * 15 / 70,

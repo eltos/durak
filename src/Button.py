@@ -93,7 +93,7 @@ class TimerButton(Button):
         self.timer.setInterval(100)
         QtCore.QObject.connect(self.timer, QtCore.SIGNAL('timeout()'), self.update)
 
-        self.start_time = time.clock()
+        self.start_time = time.time()
 
         # self.time_disabled = False
 
@@ -133,7 +133,7 @@ class TimerButton(Button):
 
     def resetTimer(self):
 
-        self.auto_click_time = time.clock() + self.auto_click_delay
+        self.auto_click_time = time.time() + self.auto_click_delay
         # self.time_disabled = True
 
     def disableTimer(self):
@@ -141,7 +141,7 @@ class TimerButton(Button):
 
     def update(self, rect=QtCore.QRectF()):
         Button.update(self, rect)
-        if self.auto_click_time <= time.clock() and \
+        if self.auto_click_time <= time.time() and \
                 self.timer.isActive():
             self.disableTimer()
             # self.time_disabled = False
@@ -158,27 +158,27 @@ class TimerButton(Button):
 
         painter.drawRect(self.boundingRect())
         painter.setPen(self.parentItem().sett.colors[
-                           'font disabled' if self.disabled or self.parentItem().end_attack_time > time.clock() else 'font'])
+                           'font disabled' if self.disabled or self.parentItem().end_attack_time > time.time() else 'font'])
 
         font = painter.font()
         font.setPointSize(max(1, font.pointSize() * self.boundingRect().width() / 120))
         painter.setFont(font)
 
         add = ""
-        if self.auto_click_time > time.clock() and \
+        if self.auto_click_time > time.time() and \
                         self.auto_click_time != float("INF") and \
-                not self.parentItem().end_attack_time > time.clock():
-            add = " - %.0f" % round(self.auto_click_time - time.clock() + 0.5)
+                not self.parentItem().end_attack_time > time.time():
+            add = " - %.0f" % round(self.auto_click_time - time.time() + 0.5)
 
         painter.drawText(self.boundingRect(), QtCore.Qt.AlignCenter, self.text + add)
 
-        if self.parentItem().end_attack_time > time.clock():
+        if self.parentItem().end_attack_time > time.time():
             font.setBold(True)
             # font.setPointSize(font.pointSize()*self.boundingRect().width()/120)
             painter.setFont(font)
             painter.setPen(self.parentItem().sett.colors['font'])
             painter.drawText(self.boundingRect(), QtCore.Qt.AlignCenter,
-                             str(int(self.parentItem().end_attack_time - time.clock() + 1)))
+                             str(int(self.parentItem().end_attack_time - time.time() + 1)))
 
 
 

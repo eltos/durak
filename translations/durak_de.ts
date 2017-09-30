@@ -53,7 +53,7 @@
     </message>
     <message>
         <source>Take cards</source>
-        <translation>Karten aufnehmen</translation>
+        <translation>Karten nehmen</translation>
     </message>
     <message>
         <source>End attack</source>
