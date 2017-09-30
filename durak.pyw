@@ -111,27 +111,12 @@ class Durak(QtGui.QGraphicsItem):
                 self.card_Items.update({card: CardItem(self, card, size=QtCore.QSize(70, 105))})
                 self.card_Items[card].hide()
 
-        # self.sett.anim = QtCore.QParallelAnimationGroup(self.scene())# anim#
-        # self.anim = QtCore.QPropertyAnimation(CardItem(self, HERZ, 2), 'pos', parent=self.scene())
-        # self.anim.setEasingCurve(QtCore.QEasingCurve.Linear)#.OutQuart)
-        # self.anim.setStartValue(QtCore.QPoint(0,0))
-        # self.anim.setEndValue(self.boundingRect().bottomRight())
-        # self.anim.setDuration(1000)
-        # self.anim.setLoopCount(-1)
-        # self.anim.start()
-        # self.sett.anim.addAnimation(self.anim)
-        # self.sett.anim.start()
 
         # SEATS
         self.seat_Items = []
         for i in range(6):
             self.seat_Items += [SeatItem(self, None)]
         self.seat_Items[0].set_player(self.players[0])
-
-        # self.seat_Items[0].setZValue(1)
-
-
-
 
         # TABLE
         self.table_Item = TableItem(self, self.table)
@@ -241,21 +226,15 @@ class Durak(QtGui.QGraphicsItem):
         self.trash_Item.update()
 
         if None in self.table.get_defence_cards() or len(self.table.get_cards()) == 0:
-            # self.cardbutton.setState(1)
             self.cardbutton.setText(self.tr('Take cards'))
             self.reset_timer()
         else:
-            # self.cardbutton.setState(2)
             self.cardbutton.setText(self.tr('End attack'))
         self.cardbutton.setDisabled(self.players[0] != self.next_attacking_player() or
                                     len(self.table.get_cards()) == 0 or self.paused)
 
         if self.players[0] == self.next_attacking_player() and not self.can_fight_attack():
             self.cardbutton.blink()
-
-        # self.cardbutton.update()
-
-
 
 
         self.KIinfo_status()
@@ -278,7 +257,7 @@ class Durak(QtGui.QGraphicsItem):
         for player in (other, self.next_attacking_player()):
             if player.get_type() == Player.KI:
                 action = player.KIdo_action(self)
-                if action != None:
+                if action is not None:
                     actions.append(player.KIdo_action(self))
             elif player.get_type() == Player.HUMAN:
                 if None not in self.table.get_defence_cards():  # auto remove cards
@@ -293,8 +272,8 @@ class Durak(QtGui.QGraphicsItem):
                 player.KIinfo_players([hash(p) for p in players])
 
     def KIinfo_cards_moved(self, cards, _from=None, to=None):
-        if _from != None: _from = hash(_from)
-        if to != None: to = hash(to)
+        if _from is not None: _from = hash(_from)
+        if to is not None: to = hash(to)
         for player in self.players:
             if player.get_type() == Player.KI:
                 player.KIinfo_cards_moved(cards, _from, to)
@@ -560,7 +539,7 @@ class Durak(QtGui.QGraphicsItem):
     def action_take_or_remove_all_cards(self, player=None):
         if self.paused: return
 
-        if player == None: player = self.next_attacking_player()
+        if player is None: player = self.next_attacking_player()
         if player != self.next_attacking_player(): return
         if len(self.table.get_cards()) == 0: return
         if None in self.table.get_defence_cards():  # take
@@ -570,7 +549,7 @@ class Durak(QtGui.QGraphicsItem):
             self.new_round(skip_player=True)
         elif self.end_attack_time <= time.time():  # remove
             res = self.table.remove_cards()
-            if res != False:
+            if res is not False:
                 self.trash.add_cards(res)
                 self.KIinfo_cards_moved(res, to=None)
                 self.new_round()
@@ -579,7 +558,7 @@ class Durak(QtGui.QGraphicsItem):
     def action_take_defence_card(self, player, card):
         if player != self.next_attacking_player(): return
         res = self.table.take_defence_card(card)
-        if res != False:
+        if res is not False:
             self.KIinfo_cards_moved([card], to=player)
             player.add_cards([card])
             self.reset_timer()
@@ -603,7 +582,7 @@ class Durak(QtGui.QGraphicsItem):
             if res == True and player == self.next_attacking_player(+1) and player != self.attacking_player:
                 self.blocked = True
 
-        if res != True:
+        if res is not True:
             player.add_cards([res])
         else:
             self.KIinfo_cards_moved([card], _from=player)
@@ -614,7 +593,7 @@ class Durak(QtGui.QGraphicsItem):
         if player != self.next_attacking_player(): return
         card = player.play_card(card)
         res = self.table.add_defence_card(card, on_card)
-        if res != True:
+        if res is not True:
             player.add_cards([res])
         else:
             self.KIinfo_cards_moved([card], _from=player)
@@ -625,29 +604,22 @@ class Durak(QtGui.QGraphicsItem):
     def action_move_defence_card(self, card, on_card):
         from_card = self.table.take_defence_card(card)
         res = self.table.add_defence_card(card, on_card)
-        if res != True:
+        if res is not True:
             res = self.table.add_defence_card(res, from_card)
-            if res != True:
+            if res is not True:
                 self.next_attacking_player().add_cards([res])
                 self.KIinfo_cards_moved([res], to=self.next_attacking_player())
-        if res == True:
+        if res is True:
             self.reset_timer()
         self.update()  # //#
 
     def card_moved(self, _from, card_Item, pos=None):
         if self.paused: return
 
-        ##        for card in self.card_Items:
-        ##            if self.card_Items[card] == card_Item:
-        ##                card = card
-        ##                break
         card = card_Item.card
-        # print pos, self.table_Item.pos()
-        # print _from.pos(), _from.rotation()
-        # print self.table_Item.boundingRect(), self.mapFromItem(self.table_Item, pos)
 
         to = None
-        if pos == None:
+        if pos is None:
             to = self.table_Item
         else:
             for item in self.seat_Items + [self.table_Item]:
@@ -658,7 +630,7 @@ class Durak(QtGui.QGraphicsItem):
         if to == self.table_Item:
             # -> table
             onto = None
-            if pos is None: # guess
+            if pos is None:  # guess
                 if _from.player == self.next_attacking_player():
                     # guess forward or defence card
                     if self.blocked or len(self.table.get_attack_cards()) >= self.next_attacking_player(+1).number_of_cards():
@@ -667,16 +639,18 @@ class Durak(QtGui.QGraphicsItem):
                         can_forward = True
                         common_name = None
                         for attack_card, defence_card in self.table.get_cards():
-                            if common_name is None: common_name = attack_card.get_name()
-                            if card.get_name() != common_name or attack_card.get_name() != common_name \
-                                    or defence_card is not None:
+                            if common_name is None:
+                                common_name = attack_card.get_name()
+                            if defence_card is not None or card.get_name() != common_name or \
+                                            attack_card.get_name() != common_name:
                                 can_forward = False
                                 break
 
                     if not can_forward:  # auto find adequate attack card if no forward possible
                         for attack_card, defence_card in self.table.get_cards():
-                            if (attack_card.color == card.color or card.is_trump()) and card > attack_card and defence_card == None:
-                                if onto == None:
+                            if defence_card is None and card > attack_card and \
+                                    (attack_card.color == card.color or card.is_trump()):
+                                if onto is None:
                                     onto = attack_card
                                 elif attack_card > onto:
                                     onto = attack_card
@@ -684,16 +658,16 @@ class Durak(QtGui.QGraphicsItem):
                 else:
                     onto = None # contribute in attack
 
-            else: # get onto card by position
+            else:  # get onto card by position
                 for attack_card, defence_card in self.table.get_cards():
                     if self.card_Items[attack_card].boundingRect().contains(
-                        self.mapToItem(self.card_Items[attack_card], pos)):
+                            self.mapToItem(self.card_Items[attack_card], pos)):
                         onto = attack_card
                         break
 
             if _from in self.seat_Items:  # player -> table
                 if _from.player == self.next_attacking_player() and \
-                                _from.player == self.players[0] and onto != None:
+                                _from.player == self.players[0] and onto is not None:
                     self.action_play_defence_card(_from.player, card, onto)
 
                 elif _from.player == self.players[0]:
@@ -701,12 +675,11 @@ class Durak(QtGui.QGraphicsItem):
 
             elif _from == self.table_Item:  # table -> table
                 if self.next_attacking_player() == self.players[0] and \
-                                card in self.table.get_defence_cards() and onto != None:
+                                card in self.table.get_defence_cards() and onto is not None:
                     self.action_move_defence_card(card, onto)
         elif to in self.seat_Items:
             # -> player
-            if to.player == self.next_attacking_player() and \
-                            to.player == self.players[0]:
+            if to.player == self.next_attacking_player() and to.player == self.players[0]:
                 self.action_take_defence_card(to.player, card)
 
 
@@ -801,17 +774,14 @@ class Durak(QtGui.QGraphicsItem):
             self.action_take_or_remove_all_cards(self.players[0])
 
     def show_menu(self):
-        # view.setDisabled(True)
         waspaused = self.paused
         self.paused = True
         self.end_attack_time = 0
         self.update()
 
         window = QtGui.QDialog(self.scene().views()[0],
-                               flags=QtCore.Qt.WindowTitleHint | \
-                                     QtCore.Qt.MSWindowsFixedSizeDialogHint)
-        window.setWindowTitle(self.scene().views()[0].windowTitle()
-                              + ' - ' + self.tr('Menu'))
+                               flags=QtCore.Qt.WindowTitleHint|QtCore.Qt.MSWindowsFixedSizeDialogHint)
+        window.setWindowTitle(self.scene().views()[0].windowTitle() + ' - ' + self.tr('Menu'))
         window.setMinimumSize(200, 100)
 
         closebutton = QtGui.QPushButton(self.tr('Close'), parent=window)
@@ -862,7 +832,7 @@ class Durak(QtGui.QGraphicsItem):
             actionsbox_layout.addWidget(about)
             actionsbox_layout.addWidget(seperator)
             actionsbox_layout.addWidget(exit_game)
-            # actionsbox_layout.setStretch(1, 1)
+
 
         settingsbox = QtGui.QGroupBox(self.tr('Settings'), parent=window)
         if settingsbox:
@@ -894,7 +864,6 @@ class Durak(QtGui.QGraphicsItem):
             deckchooser.addItems([self.tr('36 cards'),self.tr('52 cards')])
             deckchooser.setCurrentIndex(1 if self.sett.isFullDeck() else 0)
             def onDeckChange(deck):
-                print("Deck:",deck)
                 self.sett.setFullDeck(deck)
             deckchooser.connect(deckchooser, QtCore.SIGNAL('currentIndexChanged(const int)'), onDeckChange)
 
@@ -902,23 +871,11 @@ class Durak(QtGui.QGraphicsItem):
             settingsbox_layout.addWidget(deckchooser, 1, 1, alignment=QtCore.Qt.AlignLeft)
 
 
-            # settingsbox_layout.setRowStretch(1, 1)
 
         layout = QtGui.QGridLayout(window)
-        layout.addWidget(actionsbox, 0, 0)  # , alignment = QtCore.Qt.AlignCenter)
-        # layout.setRowMinimumHeight(1, 10)
-        # layout.setRowStretch(0, 1)
-        layout.addWidget(settingsbox, 2, 0)  # , alignment = QtCore.Qt.AlignBottom)
-        # layout.setColumnStretch(0, 10)
-        # layout.setRowMinimumHeight(3, 10)
-        # layout.setRowStretch(3, 1)
+        layout.addWidget(actionsbox, 0, 0)
+        layout.addWidget(settingsbox, 2, 0)
         layout.addWidget(closebutton, 4, 0, alignment=QtCore.Qt.AlignRight)
-
-        # layout.setSizePolicy(QtGui.QSizePolicy(QtGui.QSizePolicy.Expanding))
-
-
-
-
 
 
         def close(event=None):
@@ -933,37 +890,12 @@ class Durak(QtGui.QGraphicsItem):
 
     def boundingRect(self):
         return self.boundingrect
-        return QtCore.QRectF(0, 0, 960, 540)
 
     def paint(self, painter, option, widget=None):
         painter.setPen(QtCore.Qt.NoPen)
         painter.setBrush(QtGui.QColor('grey'))
-        # painter.drawRect(self.boundingRect())
         painter.drawImage(self.boundingRect(), self.sett.resources['background'])
 
-
-
-        # self.player_frame = Players_hand(self, self.table.player[0])
-        # QFrame.PdmHeight(
-
-
-        ##        s = 150#self.grafik.width()/4
-        ##        self.ziel = QRect(0,0,s,1.5*s)
-        ##
-        ##        c, n = PIK, DAME
-        ##        self.quelle = QRect((3-c)*self.grafik.width()/4,
-        ##                                   (14-n)*self.grafik.height()/13,
-        ##                                   self.grafik.width()/4,
-        ##                                   self.grafik.height()/13)
-
-        # def paintEvent(self, event):
-        # background
-
-        # cards
-        # pass
-        # painter = QPainter(self)
-        # painter.setRenderHints(QPainter.SmoothPixmapTransform)#QPainter.Antialiasing)
-        # painter.drawImage(self.ziel, self.grafik, self.quelle)
 
     def toggle_fullscreen(self, disable=None):
         if self.view is None: return
@@ -988,21 +920,10 @@ class Durak(QtGui.QGraphicsItem):
         view.setWindowIcon(QtGui.QIcon(ICON_FILE))
 
         view.setRenderHint(QtGui.QPainter.Antialiasing)
-        # view.setViewportUpdateMode(QtGui.QGraphicsView.BoundingRectViewportUpdate)
-        # view.setTransformationAnchor(QtGui.QGraphicsView.AnchorUnderMouse)
         view.setMinimumSize(0.5 * 960, 0.5 * 540)
-        # view.setBackgroundBrush(QtGui.QColor('black'))
         view.setBackgroundBrush(QtGui.QBrush(self.sett.resources['background']))
-        # view.setBackgroundBrush(QtGui.QColor('rede'))
-        # view.setWindowState(QtCore.Qt.WindowMaximized)
         view.resize(view.sceneRect().width(), view.sceneRect().height())
 
-        # view.setWindowState(QtCore.Qt.WindowFullScreen)#
-
-        # QtCore.Qt.MSWindowsFixedSizeDialogHint
-        # QtCore.Qt.FramelessWindowHint
-        # QtCore.Qt.WindowStaysOnTopHint
-        # view.setWindowFlags(QtCore.Qt.MSWindowsFixedSizeDialogHint)
 
         # shortcuts
         shortcuts = {
@@ -1026,14 +947,9 @@ class Durak(QtGui.QGraphicsItem):
 
 
         def resize(event=None):
-            # s = min((view.width()-2)/spiel.boundingRect().width(),
-            #        (view.height()-2)/spiel.boundingRect().height())
-            # spiel.setScale(s)
             self.resize(view.width(), view.height())
             # prevent scrollbars (-2)
-            view.setSceneRect(0, 0, self.sceneBoundingRect().width() - 2,
-                               self.sceneBoundingRect().height() - 2)
-            # scene.setBackgroundBrush(QtGui.QBrush(spiel.sett.resources['background']))
+            view.setSceneRect(0, 0, self.sceneBoundingRect().width() - 2, self.sceneBoundingRect().height() - 2)
 
         view.closeEvent = lambda event: self.on_exit()
         view.resizeEvent = resize
@@ -1045,6 +961,7 @@ class Durak(QtGui.QGraphicsItem):
 
 
 def main():
+    """Start the game..."""
     app = QtGui.QApplication(sys.argv)
 
     qtTranslator = QtCore.QTranslator()
