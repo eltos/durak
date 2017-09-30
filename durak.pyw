@@ -929,7 +929,7 @@ class Durak(QtGui.QGraphicsItem):
         shortcuts = {
             "F11":          self.toggle_fullscreen,
             "escape":       lambda: self.toggle_fullscreen(disable=True),
-            "space":        self.pausebutton.on_click,
+            "space":        lambda: self.pausebutton.on_click(),  # on_click method changes
             "M":            self.menubutton.on_click,
             "ctrl+N":       self.new_game,
             "left":         lambda: self.select_card(False, -1),
