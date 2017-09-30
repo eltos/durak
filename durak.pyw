@@ -35,7 +35,7 @@ def resource_path(relative_path):
 
 SCORE_FILE = 'score.sav'
 TRANSLATIONS_DIR = resource_path('translations')
-ICON_FILE = resource_path('D.ico')
+ICON_FILE = resource_path('D.png')
 Settings.THEME_DIR = resource_path('themes')
 Settings.SETTINGS_FILE = 'settings.sav'
 
@@ -984,6 +984,7 @@ class Durak(QtGui.QGraphicsItem):
         view.scene()
 
         view.setWindowTitle(self.tr('Durak'))
+
         view.setWindowIcon(QtGui.QIcon(ICON_FILE))
 
         view.setRenderHint(QtGui.QPainter.Antialiasing)
