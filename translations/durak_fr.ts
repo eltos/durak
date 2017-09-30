@@ -13,7 +13,7 @@
     </message>
     <message>
         <source>Exit</source>
-        <translation>finir</translation>
+        <translation>Finir</translation>
     </message>
     <message>
         <source>Menu</source>
@@ -25,7 +25,7 @@
     </message>
     <message>
         <source>Close</source>
-        <translation>fermer</translation>
+        <translation>Fermer</translation>
     </message>
     <message>
         <source>Durak</source>
@@ -41,7 +41,7 @@
     </message>
     <message>
         <source>Toggle fullscreen</source>
-        <translation>(Toogle fullscreen)</translation>
+        <translation>Basculer en plein écran</translation>
     </message>
     <message>
         <source>Game finished</source>
@@ -49,7 +49,7 @@
     </message>
     <message>
         <source>Last place:		%1</source>
-        <translation>(last place):		%1</translation>
+        <translation>Dernier lieu:		%1</translation>
     </message>
     <message>
         <source>Theme:</source>
@@ -57,7 +57,7 @@
     </message>
     <message>
         <source>Start new game</source>
-        <translation>redémarrer le jeu</translation>
+        <translation>Redémarrer le jeu</translation>
     </message>
     <message>
         <source>Reset score</source>
@@ -65,7 +65,7 @@
     </message>
     <message>
         <source>Continue</source>
-        <translation>continuer</translation>
+        <translation>Continuer</translation>
     </message>
     <message>
         <source>End attack</source>
@@ -73,7 +73,7 @@
     </message>
     <message>
         <source>Played games:		%1</source>
-        <translation>joué jou:		%1</translation>
+        <translation>Joué jou:		%1</translation>
     </message>
     <message>
         <source>Take cards</source>
@@ -93,7 +93,7 @@
     </message>
     <message>
         <source>New game:</source>
-        <translation>nouveau jeu:</translation>
+        <translation>Nouveau jeu:</translation>
     </message>
     <message>
         <source>Show score</source>
@@ -122,6 +122,10 @@
     <message>
         <source>52 cards</source>
         <translation>52 cartes</translation>
+    </message>
+    <message>
+        <source>Help and About</source>
+        <translation>Aidez et information</translation>
     </message>
 </context>
 </TS>

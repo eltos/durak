@@ -17,6 +17,7 @@
 
 
 import os, pickle, time, sys
+import webbrowser
 from PyQt4 import QtGui, QtCore
 from src import *
 
@@ -709,8 +710,7 @@ class Durak(QtGui.QGraphicsItem):
                 self.action_take_defence_card(to.player, card)
 
 
-    def key_shift_left_right(self, shift=False, d=1):
-
+    def select_card(self, shift=False, d=1):
         if len(self.players[0].get_cards()) == 0: return
 
         cards = self.players[0].get_cards()
@@ -816,16 +816,14 @@ class Durak(QtGui.QGraphicsItem):
 
         closebutton = QtGui.QPushButton(self.tr('Close'), parent=window)
         closebutton.setDefault(True)
-        closebutton.connect(closebutton, QtCore.SIGNAL('clicked()'),
-                            window.close)
+        closebutton.connect(closebutton, QtCore.SIGNAL('clicked()'), window.close)
 
         actionsbox = QtGui.QGroupBox('', parent=window)
         if actionsbox:
             actionsbox_layout = QtGui.QVBoxLayout(actionsbox)
 
             new_game = QtGui.QPushButton(self.tr('Start new game'), parent=actionsbox)
-            new_game.connect(new_game, QtCore.SIGNAL('clicked()'),
-                             lambda: (window.close(), self.new_game()))
+            new_game.connect(new_game, QtCore.SIGNAL('clicked()'), lambda: (window.close(), self.new_game()))
 
             def show_score_window():
                 msgBox = QtGui.QMessageBox(window)
@@ -843,11 +841,12 @@ class Durak(QtGui.QGraphicsItem):
                     show_score_window()
 
             show_score = QtGui.QPushButton(self.tr('Show score'), parent=actionsbox)
-            show_score.connect(show_score, QtCore.SIGNAL('clicked()'),
-                               show_score_window)
+            show_score.connect(show_score, QtCore.SIGNAL('clicked()'), show_score_window)
             toggle_F11 = QtGui.QPushButton(self.tr('Toggle fullscreen'), parent=actionsbox)
-            toggle_F11.connect(toggle_F11, QtCore.SIGNAL('clicked()'),
-                               self.toggle_fullscreen)
+            toggle_F11.connect(toggle_F11, QtCore.SIGNAL('clicked()'), self.toggle_fullscreen)
+
+            about = QtGui.QPushButton(self.tr('Help and About'), parent=actionsbox)
+            about.connect(about, QtCore.SIGNAL('clicked()'), lambda: webbrowser.open("https://github.com/eltos/durak"))
 
             seperator = QtGui.QFrame(actionsbox)
             seperator.setFrameShape(QtGui.QFrame.HLine)
@@ -860,6 +859,7 @@ class Durak(QtGui.QGraphicsItem):
             actionsbox_layout.addWidget(new_game)
             actionsbox_layout.addWidget(show_score)
             actionsbox_layout.addWidget(toggle_F11)
+            actionsbox_layout.addWidget(about)
             actionsbox_layout.addWidget(seperator)
             actionsbox_layout.addWidget(exit_game)
             # actionsbox_layout.setStretch(1, 1)
@@ -965,10 +965,10 @@ class Durak(QtGui.QGraphicsItem):
         # painter.setRenderHints(QPainter.SmoothPixmapTransform)#QPainter.Antialiasing)
         # painter.drawImage(self.ziel, self.grafik, self.quelle)
 
-    def toggle_fullscreen(self):
+    def toggle_fullscreen(self, disable=None):
         if self.view is None: return
 
-        if self.view.windowState() == QtCore.Qt.WindowFullScreen:
+        if disable or self.view.windowState() == QtCore.Qt.WindowFullScreen:
             self.view.setWindowState(QtCore.Qt.WindowNoState)
             self.sett.setFullscreen(False)
 
@@ -1004,38 +1004,24 @@ class Durak(QtGui.QGraphicsItem):
         # view.setWindowFlags(QtCore.Qt.MSWindowsFixedSizeDialogHint)
 
         # shortcuts
-        QtCore.QObject.connect(QtGui.QShortcut(QtGui.QKeySequence(
-            "F11"), view), QtCore.SIGNAL('activated()'), lambda: self.toggle_fullscreen())
-        QtCore.QObject.connect(QtGui.QShortcut(QtGui.QKeySequence(
-            "Escape"), view), QtCore.SIGNAL('activated()'),
-            lambda: view.setWindowState(QtCore.Qt.WindowNoState))
-        QtCore.QObject.connect(QtGui.QShortcut(QtGui.QKeySequence(
-            "Space"), view), QtCore.SIGNAL('activated()'),
-            lambda: self.pausebutton.on_click())
-        # using lambda for changing on_click function
-        QtCore.QObject.connect(QtGui.QShortcut(QtGui.QKeySequence(
-            "M"), view), QtCore.SIGNAL('activated()'),
-            self.menubutton.on_click)
-        QtCore.QObject.connect(QtGui.QShortcut(QtGui.QKeySequence(
-            "Ctrl+N"), view), QtCore.SIGNAL('activated()'),
-            self.new_game)
+        shortcuts = {
+            "F11":          self.toggle_fullscreen,
+            "escape":       lambda: self.toggle_fullscreen(disable=True),
+            "space":        self.pausebutton.on_click,
+            "M":            self.menubutton.on_click,
+            "ctrl+N":       self.new_game,
+            "left":         lambda: self.select_card(False, -1),
+            "right":        lambda: self.select_card(False, +1),
+            "shift+left":   lambda: self.select_card(True, -1),
+            "shift+right":  lambda: self.select_card(True, +1),
+            "up":           self.key_up,  # auto play selected
+            "down":         self.key_down,  # take / take all
+            "ctrl+A":       self.key_ctrl_a  # select all cards
+        }
 
-        # shortcuts for keyboard control
-        QtCore.QObject.connect(QtGui.QShortcut(QtGui.QKeySequence(
-            "left"), view), QtCore.SIGNAL('activated()'), lambda: self.key_shift_left_right(False, -1))
-        QtCore.QObject.connect(QtGui.QShortcut(QtGui.QKeySequence(
-            "right"), view), QtCore.SIGNAL('activated()'), lambda: self.key_shift_left_right(False, +1))
-        QtCore.QObject.connect(QtGui.QShortcut(QtGui.QKeySequence(
-            "shift+left"), view), QtCore.SIGNAL('activated()'), lambda: self.key_shift_left_right(True, -1))
-        QtCore.QObject.connect(QtGui.QShortcut(QtGui.QKeySequence(
-            "shift+right"), view), QtCore.SIGNAL('activated()'), lambda: self.key_shift_left_right(True, +1))
-        QtCore.QObject.connect(QtGui.QShortcut(QtGui.QKeySequence(
-            "up"), view), QtCore.SIGNAL('activated()'), self.key_up)
-        QtCore.QObject.connect(QtGui.QShortcut(QtGui.QKeySequence(
-            "down"), view), QtCore.SIGNAL('activated()'), self.key_down)
-        QtCore.QObject.connect(QtGui.QShortcut(QtGui.QKeySequence(
-            "ctrl+a"), view), QtCore.SIGNAL('activated()'), self.key_ctrl_a)
-
+        for key in shortcuts:
+            hotkey = QtGui.QShortcut(QtGui.QKeySequence(key), view)
+            QtCore.QObject.connect(hotkey, QtCore.SIGNAL('activated()'), shortcuts[key])
 
 
         def resize(event=None):

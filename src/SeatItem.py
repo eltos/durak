@@ -36,10 +36,10 @@ class SeatItem(QtGui.QGraphicsItem):
     def set_player(self, player):
         ''''''
         self.player = player
+        self.setToolTip('')
         if self.player == None:
             self.reset()
-            self.setToolTip('')
-        else:
+        elif not player.visible:
             self.setToolTip(self.player.name)
         self.update()
 

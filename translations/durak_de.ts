@@ -123,5 +123,9 @@
         <source>52 cards</source>
         <translation>52 Karten</translation>
     </message>
+    <message>
+        <source>Help and About</source>
+        <translation>Hilfe und Über</translation>
+    </message>
 </context>
 </TS>
